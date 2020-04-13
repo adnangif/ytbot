@@ -1,2 +1,18 @@
 /venv/*
 
+*.pyc
+*.json
+*.txt
+/ytbot/dist/*
+/ytbot/ytbot.egg-info/*
+*.swp
+
+
+
+
+
+
+
+
+
+
