@@ -29,7 +29,8 @@ async def launchPuppet(SETTINGS):
     accounts = getAccounts()
     links = getLinks()
     try:
-        for user in cycle(accounts):
+        # for user in cycle(accounts):
+        for user in accounts:
             await puppetShow(user, links, SETTINGS)
 
     except KeyboardInterrupt as e:
@@ -57,27 +58,8 @@ async def puppetShow(user,links,SETTINGS):
         
         page = await browser.newPage()
         await stealth(page)
-        time.sleep(2)
-
         page.setDefaultNavigationTimeout(80*1000)
-        await page.goto('https://accounts.google.com/ServiceLogin?hl=en&passive=true&continue=https://www.google.com/',
-                        {'waitUntil':'networkidle2'}
-                        )
-
-        time.sleep(3)
-        await page.keyboard.type('\t',{'delay':200})
-        await page.keyboard.type(user['username'],{'delay':50})
-        time.sleep(10)
-    
-
-
-
-        time.sleep(4)
-
-# using the next line will cause the browser to hang and not close 
-#        await page.close()
-        
-        await browser.close()
+        await googleLogin(user,page)
     
     except KeyboardInterrupt:
         try:
@@ -93,19 +75,35 @@ async def puppetShow(user,links,SETTINGS):
         except:
             print('browser already closed')
 
-    except RuntimeError as e:
-        print(str(e))
-        try:
-            await browser.close()
-            raise SystemExit('Exiting from browser')
+
+
+async def googleLogin(user,page):
+        await page.goto( 'https://www.stackoverflow.com',
+                        {'waitUntil':'networkidle2'},
+                       )
+
+        await page.waitForSelector("a[href^='https://stackoverflow.com/users/login?']")
+        await page.click("a[href^='https://stackoverflow.com/users/login?']")
         
-        except Exception as e:
-            print('did not close browser second time')
+        await page.waitForSelector('button[data-provider = "google"]') 
+        await page.click('button[data-provider = "google"]') 
+        
+        await page.waitForSelector('*')
+        aysncio.sleep(10)
+
+        await page.keyboard.type('\t',{'delay':200})
+        aysncio.sleep(4)
+        await page.keyboard.type(user['username'],{'delay':50})
+        aysncio.sleep(2)
+        await page.keyboard.type('\n')
+        aysncio.sleep(200)
+
+
+
+        
+        await browser.close()
     
-   # except Exception as e:
-  #      print(str(e))
- #       print('unknown exception')
-#        raise SystemExit
+    
 
 def getAccounts():
     BASE_PATH = os.getcwd()
