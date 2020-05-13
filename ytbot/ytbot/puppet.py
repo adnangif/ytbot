@@ -107,6 +107,8 @@ async def colabPuppet(links,page):
         print('Things did not work as expected')
     else:
         print('Everythings fine just chill')
+    print('tried accounts ',triedAccounts)
+    print('approved accounts ',approvedAccounts)
     await asyncio.sleep(200)
 
 # NotCompleted
