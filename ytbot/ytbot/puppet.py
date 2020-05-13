@@ -10,9 +10,9 @@ from pyppeteer_stealth import stealth
 
 
 # Global variables needed for all kinds of operations
-approvedAccounts = 0
 triedAccounts = 0
-
+approvedAccounts = 0
+pendingAccounts = []
 
 
 
@@ -43,9 +43,6 @@ async def launchPuppet(SETTINGS):
         tasks = [asyncio.ensure_future(puppetShow(user,links,SETTINGS)) for user in accounts]
         await asyncio.gather(*tasks)
 
-
-#        for user in accounts:
-#            await puppetShow(user, links, SETTINGS)
 
 
     except KeyboardInterrupt as e:
@@ -103,19 +100,24 @@ async def colabPuppet(links,page):
     print('this is colabPuppet')
     global approvedAccounts
     global triedAccounts
-    if not approvedAccounts == tiredAccounts:
-        print('Things did not work as expected')
+    global pendingAccounts
+
+    if pendingAccounts:
+        print('some Accounts are being processed')
     else:
-        print('Everythings fine just chill')
+        print('all done!!!')
+
     print('tried accounts ',triedAccounts)
     print('approved accounts ',approvedAccounts)
-    await asyncio.sleep(200)
+    await asyncio.sleep(10)
 
 # NotCompleted
 async def googleLogin(user,page):
     global approvedAccounts
     global triedAccounts
+    global pendingAccounts
 
+    pendingAccounts.append(user)
     triedAccounts += 1
     await page.goto( 'https://www.stackoverflow.com',
                     {'waitUntil':'networkidle2'},
@@ -139,7 +141,7 @@ async def googleLogin(user,page):
     await page.keyboard.type('\n')
     print('Logged in and counting...')
     approvedAccounts += 1
-
+    pendingAccounts.remove(user)
 
 
 
