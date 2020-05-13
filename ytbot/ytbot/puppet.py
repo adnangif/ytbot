@@ -148,12 +148,10 @@ async def googleLogin(user,page):
 
 # Completed
 def getAccounts():
-    global numOfAccounts
     BASE_PATH = os.getcwd()
     acc_path = os.path.join(BASE_PATH,'accountInfo.json')
     with open(acc_path) as f:
         accounts = json.loads(f.read())
-        numOfAccounts = len(accounts)
         return accounts
 # Completed
 def getLinks():
