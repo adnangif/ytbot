@@ -8,6 +8,15 @@ from itertools import cycle
 from pyppeteer import launch
 from pyppeteer_stealth import stealth
 
+
+# Global variables needed for all kinds of operations
+approvedAccounts = 0
+triedAccounts = 0
+
+
+
+
+
 # Completed
 async def run(SETTINGS):
     if not isConfigured():
@@ -30,6 +39,7 @@ async def launchPuppet(SETTINGS):
     accounts = getAccounts()
     links = getLinks()
     try:
+
         tasks = [asyncio.ensure_future(puppetShow(user,links,SETTINGS)) for user in accounts]
         await asyncio.gather(*tasks)
 
@@ -67,7 +77,6 @@ async def puppetShow(user,links,SETTINGS):
         page = await browser.newPage()
         await stealth(page)
         page.setDefaultNavigationTimeout(80*1000)
-        page.setDefaultTimeout(80*1000)
         await googleLogin(user,page)
         await colabPuppet(links,page)
 
@@ -92,27 +101,43 @@ async def puppetShow(user,links,SETTINGS):
 #NotCompleted
 async def colabPuppet(links,page):
     print('this is colabPuppet')
+    global approvedAccounts
+    global triedAccounts
+    if not approvedAccounts == tiredAccounts:
+        print('Things did not work as expected')
+    else:
+        print('Everythings fine just chill')
+    await asyncio.sleep(200)
 
 # NotCompleted
 async def googleLogin(user,page):
-        await page.goto( 'https://www.stackoverflow.com',
-                        {'waitUntil':'networkidle2'},
-                       )
+    global approvedAccounts
+    global triedAccounts
 
-        await page.waitForSelector("a[href^='https://stackoverflow.com/users/login?']")
-        await page.click("a[href^='https://stackoverflow.com/users/login?']")
-        await page.waitForSelector('button[data-provider = "google"]')
-        await page.click('button[data-provider = "google"]')
-        await page.waitForSelector('input')
-        await asyncio.sleep(10)
-        await page.keyboard.type('\t',{'delay':200})
-        await asyncio.sleep(5)
-        await page.keyboard.type(user['username'],{'delay':50})
-        await asyncio.sleep(5)
-        await page.keyboard.type('\n')
-        print('done with the work')
+    triedAccounts += 1
+    await page.goto( 'https://www.stackoverflow.com',
+                    {'waitUntil':'networkidle2'},
+                   )
+    await page.waitForSelector("a[href^='https://stackoverflow.com/users/login?']")
+    await page.click("a[href^='https://stackoverflow.com/users/login?']")
+    await page.waitForSelector('button[data-provider = "google"]')
+    await page.click('button[data-provider = "google"]')
+    await page.waitForSelector('input',{'timeout':80*1000})
+    await asyncio.sleep(10)
+    await page.keyboard.type('\t',{'delay':200})
+    await asyncio.sleep(5)
+    await page.keyboard.type(user['username'],{'delay':50})
+    await asyncio.sleep(5)
+    await page.keyboard.type('\n')
+    await page.waitForSelector('input[type="password"]',{'timeout':80*1000})
+    await page.keyboard.type('\t',{'delay':200})
+    await asyncio.sleep(5)
+    await page.keyboard.type(user['pass'],{'delay':50})
+    await asyncio.sleep(5)
+    await page.keyboard.type('\n')
+    print('Logged in and counting...')
+    approvedAccounts += 1
 
-        await asyncio.sleep(200)
 
 
 
@@ -121,10 +146,12 @@ async def googleLogin(user,page):
 
 # Completed
 def getAccounts():
+    global numOfAccounts
     BASE_PATH = os.getcwd()
     acc_path = os.path.join(BASE_PATH,'accountInfo.json')
     with open(acc_path) as f:
         accounts = json.loads(f.read())
+        numOfAccounts = len(accounts)
         return accounts
 # Completed
 def getLinks():
