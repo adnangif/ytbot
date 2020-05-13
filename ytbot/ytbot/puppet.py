@@ -8,13 +8,14 @@ from itertools import cycle
 from pyppeteer import launch
 from pyppeteer_stealth import stealth
 
+# Completed
 async def run(SETTINGS):
     if not isConfigured():
         help_text = '''
 
 Bot must be configured before using it!
-Try 'bot.py configure' and follow instruction. Then after the 
-configuration is complete, run the bot with 'bot.py run'     
+Try 'bot.py configure' and follow instruction. Then after the
+configuration is complete, run the bot with 'bot.py run'
 
 '''
         print(help_text)
@@ -22,16 +23,20 @@ configuration is complete, run the bot with 'bot.py run'
     else:
         await launchPuppet(SETTINGS)
 
-
+# Completed
 async def launchPuppet(SETTINGS):
     print('\nTo stop, Press Ctrl+c ')
     time.sleep(2)
     accounts = getAccounts()
     links = getLinks()
     try:
-        # for user in cycle(accounts):
-        for user in accounts:
-            await puppetShow(user, links, SETTINGS)
+        tasks = [asyncio.ensure_future(puppetShow(user,links,SETTINGS)) for user in accounts]
+        await asyncio.gather(*tasks)
+
+
+#        for user in accounts:
+#            await puppetShow(user, links, SETTINGS)
+
 
     except KeyboardInterrupt as e:
         help_text = '''
@@ -43,31 +48,38 @@ Peace Out '''
         print(help_text)
         raise SystemExit('Exit from Bot!')
 
+
+
+# NotCompleted
 async def puppetShow(user,links,SETTINGS):
     try:
         print(user)
         print(links)
         print(SETTINGS)
-        time.sleep(1)
+        await asyncio.sleep(1)
         browser = await launch(
     headless= SETTINGS['headless'],
     executablePath = 'C:\\Users\\exploit\\Desktop\\chrome-win\\chrome.exe',
     args = ['--no-sandbox','--disable-setuid-sandbox'],
     ignoreHTTPSErrors = True,
     )
-        
+
         page = await browser.newPage()
         await stealth(page)
         page.setDefaultNavigationTimeout(80*1000)
+        page.setDefaultTimeout(80*1000)
         await googleLogin(user,page)
-    
+        await colabPuppet(links,page)
+
+
+
     except KeyboardInterrupt:
         try:
             await browser.close()
             raise SystemExit('Exiting from browser')
         except:
             print('already closed')
-    
+
     except pyppeteer.errors.TimeoutError as e:
         print(str(e))
         try:
@@ -77,6 +89,11 @@ async def puppetShow(user,links,SETTINGS):
 
 
 
+#NotCompleted
+async def colabPuppet(links,page):
+    print('this is colabPuppet')
+
+# NotCompleted
 async def googleLogin(user,page):
         await page.goto( 'https://www.stackoverflow.com',
                         {'waitUntil':'networkidle2'},
@@ -84,36 +101,34 @@ async def googleLogin(user,page):
 
         await page.waitForSelector("a[href^='https://stackoverflow.com/users/login?']")
         await page.click("a[href^='https://stackoverflow.com/users/login?']")
-        
-        await page.waitForSelector('button[data-provider = "google"]') 
-        await page.click('button[data-provider = "google"]') 
-        
-        await page.waitForSelector('*')
-        aysncio.sleep(10)
-
+        await page.waitForSelector('button[data-provider = "google"]')
+        await page.click('button[data-provider = "google"]')
+        await page.waitForSelector('input')
+        await asyncio.sleep(10)
         await page.keyboard.type('\t',{'delay':200})
-        aysncio.sleep(4)
+        await asyncio.sleep(5)
         await page.keyboard.type(user['username'],{'delay':50})
-        aysncio.sleep(2)
+        await asyncio.sleep(5)
         await page.keyboard.type('\n')
-        aysncio.sleep(200)
+        print('done with the work')
+
+        await asyncio.sleep(200)
 
 
 
-        
-        await browser.close()
-    
-    
 
+
+
+# Completed
 def getAccounts():
     BASE_PATH = os.getcwd()
-    acc_path = os.path.join(BASE_PATH,'accountInfo.json')    
+    acc_path = os.path.join(BASE_PATH,'accountInfo.json')
     with open(acc_path) as f:
         accounts = json.loads(f.read())
         return accounts
-
+# Completed
 def getLinks():
-    BASE_PATH = os.getcwd()    
+    BASE_PATH = os.getcwd()
     vid_path = os.path.join(BASE_PATH,'videoLinks.txt')
     with open(vid_path) as f:
         links = []
@@ -121,7 +136,7 @@ def getLinks():
             links.append(link.strip())
         return links
 
-
+# Completed
 def isConfigured():
     BASE_PATH = os.getcwd()
     acc_path = os.path.join(BASE_PATH,'accountInfo.json')
@@ -130,4 +145,4 @@ def isConfigured():
         return True
     else:
         return False
-    
+

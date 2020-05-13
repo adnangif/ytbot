@@ -67,7 +67,7 @@ def configure(SETTINGS):
     
     success = '''Success!!!
 Informations are saved. Now to run the bot,
-Try 'bot.py run' to start the bot'''
+Try 'python3 -m ytbot run' to start the bot'''
     print(success)
 
 
