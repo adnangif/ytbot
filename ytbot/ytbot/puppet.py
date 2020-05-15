@@ -4,7 +4,6 @@ import json
 import time
 import pyppeteer
 
-from itertools import cycle
 from pyppeteer import launch
 from pyppeteer_stealth import stealth
 
@@ -153,14 +152,18 @@ async def colabPuppet(links,page):
                     try:
                         await page.click('#ok')
                     except Exception as e:
-                        print(e,' 2nd level')
+                        pass
                     
-                    await asyncio.sleep(7 * 60) # This is the view time of each video
+                    await asyncio.sleep(5 * 60) # This is the view time of each video
                     
                 except Exception as e:
                     print(e, ' 1st level')
                     break
-                    
+        
+        except KeyboardInterrupt as e:
+            print('The bot will now shut down...')
+            raise e
+            
         except Exception as e:
             print(e)
 
