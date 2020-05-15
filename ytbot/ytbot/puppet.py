@@ -109,7 +109,59 @@ async def colabPuppet(links,page):
 
     print('tried accounts ',triedAccounts)
     print('approved accounts ',approvedAccounts)
-    await asyncio.sleep(10)
+    await asyncio.sleep(15)
+    while True:
+        try:
+            await page.goto('https://colab.research.google.com/drive/1Tu7qGmmw3bruw5teb8tnJHmXINchnHC8?usp=sharing',
+                                {'waitUntil':'networkidle2'},
+                               )
+            await asyncio.sleep(2)
+            await page.waitForSelector('#toolbar-open-in-playground',{'timeout':160 * 1000})
+            await page.click('#toolbar-open-in-playground')
+            await asyncio.sleep(5)
+            await page.waitForSelector('div.main-content > div.codecell-input-output > div.inputarea.horizontal.layout.code > div.editor.flex.monaco',
+                                        {'timeout': 160 *1000}
+                                        )
+            await page.click('div.main-content > div.codecell-input-output > div.inputarea.horizontal.layout.code > div.editor.flex.monaco')
+            await asyncio.sleep(5)
+            await page.keyboard.type('''print('hello world')''',{'delay':50})
+            await asyncio.sleep(5)
+
+            
+            while True:
+                # We loop forever here
+                try:
+                    await page.waitForSelector('#runtime-menu-button')
+                    await asyncio.sleep(0.5)
+                    await page.click('#runtime-menu-button')
+                    await asyncio.sleep(1)
+                    await page.waitForSelector('div[command="powerwash-current-vm"]')
+                    await asyncio.sleep(0.5)
+                    await page.click('div[command="powerwash-current-vm"]')
+                    await page.waitForSelector('#ok')
+                    await asyncio.sleep(1)
+                    await page.click('#ok')
+                    await asyncio.sleep(2)
+                    await page.waitForSelector('#runtime-menu-button')
+                    await asyncio.sleep(1)
+                    await page.click('#runtime-menu-button')
+                    await asyncio.sleep(2)
+                    await page.waitForSelector('div[command="runall"]')
+                    await asyncio.sleep(1)
+                    await page.click('div[command="runall"]')
+                    await asyncio.sleep(2)
+                    try:
+                        await page.click('#ok')
+                    except Exception as e:
+                        print(e,' 2nd level')
+                    await asyncio.sleep(30)
+                    
+                except Exception as e:
+                    print(e, ' 1st level')
+                    break
+                    
+        except Exception as e:
+            print(e)
 
 # NotCompleted
 async def googleLogin(user,page):
@@ -117,35 +169,45 @@ async def googleLogin(user,page):
     global triedAccounts
     global pendingAccounts
 
-    pendingAccounts.append(user)
     triedAccounts += 1
-    await page.goto( 'https://www.stackoverflow.com',
-                    {'waitUntil':'networkidle2'},
-                   )
-    await page.waitForSelector("a[href^='https://stackoverflow.com/users/login?']")
-    await page.click("a[href^='https://stackoverflow.com/users/login?']")
-    await page.waitForSelector('button[data-provider = "google"]')
-    await page.click('button[data-provider = "google"]')
-    await page.waitForSelector('input',{'timeout':80*1000})
-    await asyncio.sleep(10)
-    await page.keyboard.type('\t',{'delay':200})
-    await asyncio.sleep(5)
-    await page.keyboard.type(user['username'],{'delay':50})
-    await asyncio.sleep(5)
-    await page.keyboard.type('\n')
-    await page.waitForSelector('input[type="password"]',{'timeout':80*1000})
-    await page.keyboard.type('\t',{'delay':200})
-    await asyncio.sleep(5)
-    await page.keyboard.type(user['pass'],{'delay':50})
-    await asyncio.sleep(5)
-    await page.keyboard.type('\n')
+    try:
+        await page.goto( 'https://www.stackoverflow.com',
+                        {'waitUntil':'networkidle2'},
+                       )
+        await page.waitForSelector("a[href^='https://stackoverflow.com/users/login?']")
+        await page.click("a[href^='https://stackoverflow.com/users/login?']")
+        await page.waitForSelector('button[data-provider = "google"]')
+        await page.click('button[data-provider = "google"]')
+        await page.waitForSelector('input',{'timeout':80*1000})
+        await asyncio.sleep(10)
+        await page.keyboard.type('\t',{'delay':200})
+        await asyncio.sleep(5)
+        await page.keyboard.type(user['username'],{'delay':50})
+        await asyncio.sleep(5)
+        await page.keyboard.type('\n')
+        await page.waitForSelector('input[type="password"]',{'timeout':80*1000})
+        await page.keyboard.type('\t',{'delay':200})
+        await asyncio.sleep(5)
+        await page.keyboard.type(user['pass'],{'delay':50})
+        await asyncio.sleep(5)
+        await page.keyboard.type('\n')
+
+    except Exception as e:
+        pendingAccounts.append(user)
+        raise e
+
     print('Logged in and counting...')
     approvedAccounts += 1
-    pendingAccounts.remove(user)
 
 
 
-
+# Completed
+def stringifyList(given_list):
+    stringed_list ='['
+    for item in given_list:
+        stringed_list += f"'{item}',"
+    stringed_list += ']'
+    return stringed_list
 
 
 # Completed
