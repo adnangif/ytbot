@@ -5,7 +5,7 @@ from .cfg import configure
 from .puppet import run 
 from .cfg import reset
 
-
+# Pass configurations with this dictionary
 SETTINGS = dict()
 
 

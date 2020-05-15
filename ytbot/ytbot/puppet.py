@@ -38,8 +38,9 @@ async def launchPuppet(SETTINGS):
     time.sleep(2)
     accounts = getAccounts()
     links = getLinks()
+    SETTINGS['path'] = getExecutablePath()
+    
     try:
-
         tasks = [asyncio.ensure_future(puppetShow(user,links,SETTINGS)) for user in accounts]
         await asyncio.gather(*tasks)
 
@@ -56,7 +57,7 @@ Peace Out '''
         raise SystemExit('Exit from Bot!')
 
 
-
+# Path = 'C:\\Users\\exploit\\Desktop\\chrome-win\\chrome.exe'
 # NotCompleted
 async def puppetShow(user,links,SETTINGS):
     try:
@@ -66,7 +67,7 @@ async def puppetShow(user,links,SETTINGS):
         await asyncio.sleep(1)
         browser = await launch(
     headless= SETTINGS['headless'],
-    executablePath = 'C:\\Users\\exploit\\Desktop\\chrome-win\\chrome.exe',
+    executablePath = SETTINGS['path'],
     args = ['--no-sandbox','--disable-setuid-sandbox'],
     ignoreHTTPSErrors = True,
     )
@@ -97,7 +98,6 @@ async def puppetShow(user,links,SETTINGS):
 
 #NotCompleted
 async def colabPuppet(links,page):
-    print('this is colabPuppet')
     global approvedAccounts
     global triedAccounts
     global pendingAccounts
@@ -154,7 +154,8 @@ async def colabPuppet(links,page):
                         await page.click('#ok')
                     except Exception as e:
                         print(e,' 2nd level')
-                    await asyncio.sleep(30)
+                    
+                    await asyncio.sleep(7 * 60) # This is the view time of each video
                     
                 except Exception as e:
                     print(e, ' 1st level')
@@ -228,11 +229,20 @@ def getLinks():
         return links
 
 # Completed
+def getExecutablePath():
+    BASE_PATH = os.getcwd()
+    executable_path = os.path.join(BASE_PATH,'execpath.txt')
+    with open(executable_path) as f:
+        path = f.read().strip()
+        return path
+
+# Completed
 def isConfigured():
     BASE_PATH = os.getcwd()
     acc_path = os.path.join(BASE_PATH,'accountInfo.json')
     vid_path = os.path.join(BASE_PATH,'videoLinks.txt')
-    if os.path.isfile(acc_path) and os.path.isfile(vid_path):
+    executable_path = os.path.join(BASE_PATH,'execpath.txt')
+    if os.path.isfile(acc_path) and os.path.isfile(vid_path) and os.path.isfile(executable_path):
         return True
     else:
         return False
