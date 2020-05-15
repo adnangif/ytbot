@@ -53,8 +53,12 @@ async def launchPuppet(SETTINGS):
 # NotCompleted
 async def puppetShow(user,links,SETTINGS):
     try:
+        print('using profile: ')
         print(user)
+        print('\n')
+        print('forwarded links: ')
         print(links)
+        print('used settings: ')
         print(SETTINGS)
         await asyncio.sleep(1)
         browser = await launch(
