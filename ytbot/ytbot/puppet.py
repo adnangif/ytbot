@@ -45,7 +45,7 @@ async def launchPuppet(SETTINGS):
 
 
     except Exception as e:
-        raise SystemExit('Exit...')
+        print(e)
 
 
 
@@ -58,8 +58,10 @@ async def puppetShow(user,links,SETTINGS):
         print('\n')
         print('forwarded links: ')
         print(links)
+        print('\n')
         print('used settings: ')
         print(SETTINGS)
+        print('____________________________________________')        
         await asyncio.sleep(1)
         browser = await launch(
     headless= SETTINGS['headless'],
@@ -109,11 +111,19 @@ async def colabPuppet(links,page):
     print('tried accounts ',triedAccounts)
     print('approved accounts ',approvedAccounts)
     await asyncio.sleep(15)
-    while True:
+    
+    restart = False
+    while True:   
         try:
+
             await page.goto('https://colab.research.google.com/drive/1Tu7qGmmw3bruw5teb8tnJHmXINchnHC8?usp=sharing',
                                 {'waitUntil':'networkidle2'},
                                )
+            # pressing enter is mandatory cause reloading causes a prompt to show
+            if restart:
+                await page.keyboard.type('\n')
+                restart = False
+                
             await asyncio.sleep(2)
             await page.waitForSelector('#toolbar-open-in-playground',{'timeout':160 * 1000})
             await page.click('#toolbar-open-in-playground')
@@ -155,9 +165,14 @@ async def colabPuppet(links,page):
                         pass
                     
                     await asyncio.sleep(5 * 60) # This is the view time of each video
+                
+                except KeyboardInterrupt as e:
+                    raise SystemExit('The bot will now shut down...')
+                     
                     
                 except Exception as e:
                     print(e, ' 1st level')
+                    restart = True
                     break
         
         except KeyboardInterrupt as e:
