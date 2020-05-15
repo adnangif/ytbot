@@ -20,8 +20,19 @@ def main( step, headless):
 
 
     if step == 'run':
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(run(SETTINGS))
+        try:
+            loop = asyncio.get_event_loop()
+            loop.run_until_complete(run(SETTINGS))
+            
+        except Exception as e:
+            help_text = '''
+Hey There! Did face any issue while running the app?
+Let me Know and I'll try to fix it.
+for any additional information, contact me at: 'muhammadfahim010@gmail.com'
+Also any kind of feedback would be super encouraging.
+Peace Out '''
+            print(help_text)
+            raise SystemExit('Exit from Bot!')
     
     elif step == 'configure':
         configure(SETTINGS)

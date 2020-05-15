@@ -44,16 +44,9 @@ async def launchPuppet(SETTINGS):
         await asyncio.gather(*tasks)
 
 
+    except Exception as e:
+        raise SystemExit('Exit...')
 
-    except KeyboardInterrupt as e:
-        help_text = '''
-Hey There! Did face any issue while running the app?
-Let me Know and I'll try to fix it.
-for any additional information, contact me at: 'muhammadfahim010@gmail.com'
-Also any kind of feedback would be super encouraging.
-Peace Out '''
-        print(help_text)
-        raise SystemExit('Exit from Bot!')
 
 
 # Path = 'C:\\Users\\exploit\\Desktop\\chrome-win\\chrome.exe'
@@ -101,6 +94,9 @@ async def colabPuppet(links,page):
     global triedAccounts
     global pendingAccounts
 
+    # This code will be written in the first cell of BotSeed google colab file
+    code = f'links = {stringifyList(links)}'
+    
     if pendingAccounts:
         print('some Accounts are being processed')
     else:
@@ -123,7 +119,7 @@ async def colabPuppet(links,page):
                                         )
             await page.click('div.main-content > div.codecell-input-output > div.inputarea.horizontal.layout.code > div.editor.flex.monaco')
             await asyncio.sleep(5)
-            await page.keyboard.type('''print('hello world')''',{'delay':50})
+            await page.keyboard.type(code,{'delay':50}) # Code is written here
             await asyncio.sleep(5)
 
             
