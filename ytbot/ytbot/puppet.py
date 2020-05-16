@@ -12,7 +12,7 @@ from pyppeteer_stealth import stealth
 triedAccounts = 0
 approvedAccounts = 0
 pendingAccounts = []
-
+view_count = 0
 
 
 
@@ -42,6 +42,7 @@ async def launchPuppet(SETTINGS):
     try:
         tasks = [asyncio.ensure_future(puppetShow(user,links,SETTINGS)) for user in accounts]
         await asyncio.gather(*tasks)
+        print(pendingAccounts)
 
 
     except Exception as e:
@@ -50,7 +51,7 @@ async def launchPuppet(SETTINGS):
 
 
 # Path = 'C:\\Users\\exploit\\Desktop\\chrome-win\\chrome.exe'
-# NotCompleted
+# Completed
 async def puppetShow(user,links,SETTINGS):
     try:
         print('using profile: ')
@@ -69,21 +70,24 @@ async def puppetShow(user,links,SETTINGS):
     args = ['--no-sandbox','--disable-setuid-sandbox'],
     ignoreHTTPSErrors = True,
     )
-
         page = await browser.newPage()
         await stealth(page)
         page.setDefaultNavigationTimeout(80*1000)
-        await googleLogin(user,page)
-        await colabPuppet(links,page)
-
-
-
+        logged_in = await googleLogin(user,page)
+        
+        if logged_in:
+            await asyncio.sleep(15)
+            await colabPuppet(links,page)
+        else: 
+            print('login failed')
+            
     except KeyboardInterrupt:
         try:
             await browser.close()
             raise SystemExit('Exiting from browser')
         except:
             print('already closed')
+            raise SystemExit('Exiting from browser')
 
     except pyppeteer.errors.TimeoutError as e:
         print(str(e))
@@ -94,96 +98,103 @@ async def puppetShow(user,links,SETTINGS):
 
 
 
-#NotCompleted
-async def colabPuppet(links,page):
-    global approvedAccounts
-    global triedAccounts
-    global pendingAccounts
-
-    # This code will be written in the first cell of BotSeed google colab file
-    code = f'links = {stringifyList(links)}'
+# Completed
+def showInfos():
+    # global approvedAccounts
+    # global triedAccounts
+    # global pendingAccounts
+    
+    print('tried accounts ',triedAccounts)
+    print('approved accounts ',approvedAccounts)
     
     if pendingAccounts:
         print('some Accounts are being processed')
     else:
         print('all done!!!')
 
-    print('tried accounts ',triedAccounts)
-    print('approved accounts ',approvedAccounts)
-    await asyncio.sleep(15)
+
+
+#NotCompleted
+async def colabPuppet(links,page):
+    # Infos are displayed for user
+    showInfos()
     
-    restart = False
-    while True:   
-        try:
+    # This code will be written in the first cell of BotSeed google colab file
+    code = f'links = {stringifyList(links)}'
+    
+    await setupColab(page = page, code = code)
+    try:
+        while True:
+            '''this loop does factory reset, run all and then sleep '''
+            try:
+                await colabResetRun(page = page)
+            except KeyboardInterrupt as e:
+                raise SystemExit('The bot will now shut down...')       
+    except Exception as e:
+        print(e)
 
-            await page.goto('https://colab.research.google.com/drive/1Tu7qGmmw3bruw5teb8tnJHmXINchnHC8?usp=sharing',
-                                {'waitUntil':'networkidle2'},
-                               )
-            # pressing enter is mandatory cause reloading causes a prompt to show
-            if restart:
-                await page.keyboard.type('\n')
-                restart = False
-                
-            await asyncio.sleep(2)
-            await page.waitForSelector('#toolbar-open-in-playground',{'timeout':160 * 1000})
-            await page.click('#toolbar-open-in-playground')
-            await asyncio.sleep(5)
-            await page.waitForSelector('div.main-content > div.codecell-input-output > div.inputarea.horizontal.layout.code > div.editor.flex.monaco',
-                                        {'timeout': 160 *1000}
-                                        )
-            await page.click('div.main-content > div.codecell-input-output > div.inputarea.horizontal.layout.code > div.editor.flex.monaco')
-            await asyncio.sleep(5)
-            await page.keyboard.type(code,{'delay':50}) # Code is written here
-            await asyncio.sleep(5)
+# Completed
+async def colabResetRun(page):
+    global view_count
+    
+    await page.waitForSelector('#runtime-menu-button')
+    await asyncio.sleep(2)
+    await page.click('#runtime-menu-button')
+    await asyncio.sleep(1.5)
+    await page.waitForSelector('div[command="powerwash-current-vm"]')
+    await asyncio.sleep(1.5)
+    await page.click('div[command="powerwash-current-vm"]')
+    await page.waitForSelector('#ok')
+    await asyncio.sleep(1.5)
+    await page.click('#ok')
+    await asyncio.sleep(2)
+    await page.waitForSelector('#runtime-menu-button')
+    await asyncio.sleep(1.5)
+    await page.click('#runtime-menu-button')
+    await asyncio.sleep(2)
+    await page.waitForSelector('div[command="runall"]')
+    await asyncio.sleep(1.5)
+    await page.click('div[command="runall"]')
+    await asyncio.sleep(2)
+    try:
+        await page.click('#ok')
+    except Exception as e:
+        pass
+    
+    # Increase view_count
+    view_count += 1
+    print('A view completed view count: ',view_count)
+    await asyncio.sleep(20) # This is the view time of each video
+    
+    
+    
+    
 
-            
-            while True:
-                # We loop forever here
-                try:
-                    await page.waitForSelector('#runtime-menu-button')
-                    await asyncio.sleep(0.5)
-                    await page.click('#runtime-menu-button')
-                    await asyncio.sleep(1)
-                    await page.waitForSelector('div[command="powerwash-current-vm"]')
-                    await asyncio.sleep(0.5)
-                    await page.click('div[command="powerwash-current-vm"]')
-                    await page.waitForSelector('#ok')
-                    await asyncio.sleep(1)
-                    await page.click('#ok')
-                    await asyncio.sleep(2)
-                    await page.waitForSelector('#runtime-menu-button')
-                    await asyncio.sleep(1)
-                    await page.click('#runtime-menu-button')
-                    await asyncio.sleep(2)
-                    await page.waitForSelector('div[command="runall"]')
-                    await asyncio.sleep(1)
-                    await page.click('div[command="runall"]')
-                    await asyncio.sleep(2)
-                    try:
-                        await page.click('#ok')
-                    except Exception as e:
-                        pass
-                    
-                    await asyncio.sleep(5 * 60) # This is the view time of each video
-                
-                except KeyboardInterrupt as e:
-                    raise SystemExit('The bot will now shut down...')
-                     
-                    
-                except Exception as e:
-                    print(e, ' 1st level')
-                    restart = True
-                    break
-        
-        except KeyboardInterrupt as e:
-            print('The bot will now shut down...')
-            raise e
-            
-        except Exception as e:
-            print(e)
+
 
 # NotCompleted
+async def setupColab(page,code):
+    await asyncio.sleep(10)
+    colab_link = 'https://colab.research.google.com/drive/1Tu7qGmmw3bruw5teb8tnJHmXINchnHC8?usp=sharing'
+    await page.goto(colab_link,
+                    {'waitUntil':'networkidle2'},
+                   )
+    await asyncio.sleep(2)
+    await page.waitForSelector('#toolbar-open-in-playground',{'timeout':160 * 1000})
+    await page.click('#toolbar-open-in-playground')
+    await asyncio.sleep(5)
+    await page.waitForSelector('div.main-content > div.codecell-input-output > div.inputarea.horizontal.layout.code > div.editor.flex.monaco',
+                                {'timeout': 160 *1000}
+                                )
+    await page.click('div.main-content > div.codecell-input-output > div.inputarea.horizontal.layout.code > div.editor.flex.monaco')
+    await asyncio.sleep(5)
+    await page.keyboard.type(code,{'delay':50}) # Code is written here
+    await asyncio.sleep(5)
+
+
+# Completed
 async def googleLogin(user,page):
+    ''' google login via stackoverflow auth '''
     global approvedAccounts
     global triedAccounts
     global pendingAccounts
@@ -205,23 +216,26 @@ async def googleLogin(user,page):
         await asyncio.sleep(5)
         await page.keyboard.type('\n')
         await page.waitForSelector('input[type="password"]',{'timeout':80*1000})
+        await asyncio.sleep(5)
         await page.keyboard.type('\t',{'delay':200})
         await asyncio.sleep(5)
         await page.keyboard.type(user['pass'],{'delay':50})
         await asyncio.sleep(5)
         await page.keyboard.type('\n')
+        print('Logged in and counting...')
+        approvedAccounts += 1
+        return True
 
     except Exception as e:
         pendingAccounts.append(user)
         raise e
 
-    print('Logged in and counting...')
-    approvedAccounts += 1
 
 
 
 # Completed
 def stringifyList(given_list):
+    ''' takes a string and makes a string out of that list'''
     stringed_list ='['
     for item in given_list:
         stringed_list += f"'{item}',"
@@ -231,6 +245,7 @@ def stringifyList(given_list):
 
 # Completed
 def getAccounts():
+    ''' retrives saved accounts'''
     BASE_PATH = os.getcwd()
     acc_path = os.path.join(BASE_PATH,'accountInfo.json')
     with open(acc_path) as f:
@@ -238,6 +253,7 @@ def getAccounts():
         return accounts
 # Completed
 def getLinks():
+    ''' retrives saved links '''
     BASE_PATH = os.getcwd()
     vid_path = os.path.join(BASE_PATH,'videoLinks.txt')
     with open(vid_path) as f:
@@ -248,6 +264,7 @@ def getLinks():
 
 # Completed
 def getExecutablePath():
+    ''' retrives saved executable path to chromium browser '''
     BASE_PATH = os.getcwd()
     executable_path = os.path.join(BASE_PATH,'execpath.txt')
     with open(executable_path) as f:
@@ -256,6 +273,7 @@ def getExecutablePath():
 
 # Completed
 def isConfigured():
+    ''' checks if the cofig files exist '''
     BASE_PATH = os.getcwd()
     acc_path = os.path.join(BASE_PATH,'accountInfo.json')
     vid_path = os.path.join(BASE_PATH,'videoLinks.txt')
