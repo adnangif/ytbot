@@ -133,7 +133,7 @@ async def colabPuppet(links,page):
     except Exception as e:
         print(e)
 
-# Completed
+# NotCompleted
 async def colabResetRun(page):
     global view_count
     
@@ -148,6 +148,12 @@ async def colabResetRun(page):
     await asyncio.sleep(1.5)
     await page.click('#ok')
     await asyncio.sleep(2)
+    
+    try:
+        await page.click('#ok')
+    except Exception as e:
+        pass
+    
     await page.waitForSelector('#runtime-menu-button')
     await asyncio.sleep(1.5)
     await page.click('#runtime-menu-button')
@@ -156,6 +162,12 @@ async def colabResetRun(page):
     await asyncio.sleep(1.5)
     await page.click('div[command="runall"]')
     await asyncio.sleep(2)
+    
+    try:
+        await page.click('#ok')
+    except Exception as e:
+        pass
+    await asyncio.sleep(2) 
     try:
         await page.click('#ok')
     except Exception as e:
@@ -172,7 +184,7 @@ async def colabResetRun(page):
 
 
 
-# NotCompleted
+# Completed
 async def setupColab(page,code):
     await asyncio.sleep(10)
     colab_link = 'https://colab.research.google.com/drive/1Tu7qGmmw3bruw5teb8tnJHmXINchnHC8?usp=sharing'
