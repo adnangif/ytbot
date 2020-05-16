@@ -164,7 +164,7 @@ async def colabResetRun(page):
     # Increase view_count
     view_count += 1
     print('A view completed view count: ',view_count)
-    await asyncio.sleep(20) # This is the view time of each video
+    await asyncio.sleep(30) # This is the view time of each video
     
     
     
