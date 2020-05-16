@@ -129,7 +129,9 @@ async def colabPuppet(links,page):
             try:
                 await colabResetRun(page = page)
             except KeyboardInterrupt as e:
-                raise SystemExit('The bot will now shut down...')       
+                raise SystemExit('The bot will now shut down...')   
+            except Exception as e:
+                print(e)
     except Exception as e:
         print(e)
 
@@ -137,41 +139,44 @@ async def colabPuppet(links,page):
 async def colabResetRun(page):
     global view_count
     
+    print(140)
+    await asyncio.sleep(2)
     await page.waitForSelector('#runtime-menu-button')
     await asyncio.sleep(2)
+    print(143)
     await page.click('#runtime-menu-button')
-    await asyncio.sleep(1.5)
+    await asyncio.sleep(2)
     await page.waitForSelector('div[command="powerwash-current-vm"]')
-    await asyncio.sleep(1.5)
+    await asyncio.sleep(2)
     await page.click('div[command="powerwash-current-vm"]')
+    print(149)
     await page.waitForSelector('#ok')
-    await asyncio.sleep(1.5)
+    await asyncio.sleep(2)
     await page.click('#ok')
+    print(153)
     await asyncio.sleep(2)
     
     try:
         await page.click('#ok')
     except Exception as e:
         pass
-    
+    print(160)
     await page.waitForSelector('#runtime-menu-button')
-    await asyncio.sleep(1.5)
+    await asyncio.sleep(2)
     await page.click('#runtime-menu-button')
+    print(164)
     await asyncio.sleep(2)
     await page.waitForSelector('div[command="runall"]')
-    await asyncio.sleep(1.5)
+    await asyncio.sleep(2)
     await page.click('div[command="runall"]')
     await asyncio.sleep(2)
+    print(170)
     
     try:
         await page.click('#ok')
     except Exception as e:
         pass
-    await asyncio.sleep(2) 
-    try:
-        await page.click('#ok')
-    except Exception as e:
-        pass
+ 
     
     # Increase view_count
     view_count += 1
