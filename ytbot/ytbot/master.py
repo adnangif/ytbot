@@ -43,18 +43,18 @@ Peace Out '''
     else:
         print(
         '''Usage: 
-            ytbot.py [OPTIONS] [OPTIONS]
+            ytbot    [OPTIONS] [OPTIONS]
 
-            ytbot.py configure                    configure bot for 
+            ytbot    configure                    configure bot for 
                                                   first time
 
-            ytbot.py run                          after configuration
+            ytbot    run                          after configuration
                                                   run the bot
             
-            ytbot.py reset                        reset the configuration
+            ytbot    reset                        reset the configuration
                                                   and start anew
 
-            ytbot.py run [--headless][-h]         To run in headless mode!
+            ytbot    run [--headless][-h]         To run in headless mode!
                                                   Default is headful!!!
 
 ''')
