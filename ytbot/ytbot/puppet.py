@@ -138,7 +138,11 @@ async def colabPuppet(links,page):
 # NotCompleted
 async def colabResetRun(page):
     global view_count
-    
+
+    try:
+        await page.click('#ok')
+    except Exception as e:
+        pass    
     print(140)
     await asyncio.sleep(2)
     await page.waitForSelector('#runtime-menu-button')
@@ -146,31 +150,32 @@ async def colabResetRun(page):
     print(143)
     await page.click('#runtime-menu-button')
     await asyncio.sleep(2)
+    print(149)
     await page.waitForSelector('div[command="powerwash-current-vm"]')
     await asyncio.sleep(2)
     await page.click('div[command="powerwash-current-vm"]')
-    print(149)
+    print(157)
     await page.waitForSelector('#ok')
     await asyncio.sleep(2)
     await page.click('#ok')
-    print(153)
+    print(161)
     await asyncio.sleep(2)
     
     try:
         await page.click('#ok')
     except Exception as e:
         pass
-    print(160)
+    print(168)
     await page.waitForSelector('#runtime-menu-button')
     await asyncio.sleep(2)
     await page.click('#runtime-menu-button')
-    print(164)
+    print(172)
     await asyncio.sleep(2)
     await page.waitForSelector('div[command="runall"]')
     await asyncio.sleep(2)
     await page.click('div[command="runall"]')
     await asyncio.sleep(2)
-    print(170)
+    print(178)
     
     try:
         await page.click('#ok')
@@ -181,7 +186,7 @@ async def colabResetRun(page):
     # Increase view_count
     view_count += 1
     print('A view completed view count: ',view_count)
-    await asyncio.sleep(30) # This is the view time of each video
+    await asyncio.sleep(5 * 60) # This is the view time of each video
     
     
     
