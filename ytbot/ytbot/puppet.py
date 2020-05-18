@@ -65,9 +65,9 @@ async def puppetShow(user,links,SETTINGS):
         print('used settings: ')
         print(SETTINGS)
         print('____________________________________________')
-        while true:
+        while True:
             try:
-                await asyncio.sleep(random.randint(2,7))
+                await asyncio.sleep(random.randint(2,15))
                 browser = await launch(
             headless= SETTINGS['headless'],
             executablePath = SETTINGS['path'],
