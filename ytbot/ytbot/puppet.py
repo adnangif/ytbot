@@ -4,6 +4,7 @@ import json
 import time
 import pyppeteer
 import random
+import time
 
 from pyppeteer import launch
 from pyppeteer_stealth import stealth
@@ -55,7 +56,6 @@ async def launchPuppet(SETTINGS):
 # Completed
 async def puppetShow(user,links,SETTINGS):
     try:
-        await asyncio.sleep(random.randint(9,20))
         print('using profile: ')
         print(user)
         print('\n')
@@ -249,6 +249,7 @@ async def googleLogin(user,page):
         print('Logged in and counting...')
         approvedAccounts += 1
         print('approved user: ', user['username'])
+        time.sleep(45)  
         return True
 
     except Exception as e:
