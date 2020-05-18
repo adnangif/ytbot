@@ -38,7 +38,7 @@ async def launchPuppet(SETTINGS):
     accounts = getAccounts()
     links = getLinks()
     SETTINGS['path'] = getExecutablePath()
-    
+
     try:
         tasks = [asyncio.ensure_future(puppetShow(user,links,SETTINGS)) for user in accounts]
         await asyncio.gather(*tasks)
@@ -62,7 +62,7 @@ async def puppetShow(user,links,SETTINGS):
         print('\n')
         print('used settings: ')
         print(SETTINGS)
-        print('____________________________________________')        
+        print('____________________________________________')
         await asyncio.sleep(1)
         browser = await launch(
     headless= SETTINGS['headless'],
@@ -74,13 +74,13 @@ async def puppetShow(user,links,SETTINGS):
         await stealth(page)
         page.setDefaultNavigationTimeout(80*1000)
         logged_in = await googleLogin(user,page)
-        
+
         if logged_in:
             await asyncio.sleep(15)
             await colabPuppet(links,page)
-        else: 
+        else:
             print('login failed')
-            
+
     except KeyboardInterrupt:
         try:
             await browser.close()
@@ -103,10 +103,10 @@ def showInfos():
     # global approvedAccounts
     # global triedAccounts
     # global pendingAccounts
-    
+
     print('tried accounts ',triedAccounts)
     print('approved accounts ',approvedAccounts)
-    
+
     if pendingAccounts:
         print('some Accounts are being processed')
     else:
@@ -118,10 +118,10 @@ def showInfos():
 async def colabPuppet(links,page):
     # Infos are displayed for user
     showInfos()
-    
+
     # This code will be written in the first cell of BotSeed google colab file
     code = f'links = {stringifyList(links)}'
-    
+
     await setupColab(page = page, code = code)
     try:
         while True:
@@ -129,7 +129,7 @@ async def colabPuppet(links,page):
             try:
                 await colabResetRun(page = page)
             except KeyboardInterrupt as e:
-                raise SystemExit('The bot will now shut down...')   
+                raise SystemExit('The bot will now shut down...')
             except Exception as e:
                 print(e)
     except Exception as e:
@@ -142,7 +142,7 @@ async def colabResetRun(page):
     try:
         await page.click('#ok')
     except Exception as e:
-        pass    
+        pass
     print('started looping')
     await asyncio.sleep(2)
     await page.waitForSelector('#runtime-menu-button')
@@ -160,7 +160,7 @@ async def colabResetRun(page):
     await page.click('#ok')
     print('clicking confirmation ok button')
     await asyncio.sleep(2)
-    
+
     try:
         await page.click('#ok')
     except Exception as e:
@@ -176,21 +176,21 @@ async def colabResetRun(page):
     await page.click('div[command="runall"]')
     await asyncio.sleep(2)
     print('running all pending commands sequently')
-    
+
     try:
         await page.click('#ok')
     except Exception as e:
         pass
- 
-    
+
+
     # Increase view_count
     view_count += 1
     print('A view completed view count: ',view_count)
-    await asyncio.sleep(5 * 60) # This is the view time of each video
-    
-    
-    
-    
+    await asyncio.sleep(7 * 60) # This is the view time of each video
+
+
+
+
 
 
 
