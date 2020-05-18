@@ -65,31 +65,36 @@ async def puppetShow(user,links,SETTINGS):
         print('used settings: ')
         print(SETTINGS)
         print('____________________________________________')
-        await asyncio.sleep(random.randint(20,70))
-        browser = await launch(
-    headless= SETTINGS['headless'],
-    executablePath = SETTINGS['path'],
-    args = ['--no-sandbox','--disable-setuid-sandbox'],
-    ignoreHTTPSErrors = True,
-    )
-        page = await browser.newPage()
-        await stealth(page)
-        page.setDefaultNavigationTimeout(80*1000)
-        logged_in = await googleLogin(user,page)
+        while true:
+            try:
+                await asyncio.sleep(random.randint(2,7))
+                browser = await launch(
+            headless= SETTINGS['headless'],
+            executablePath = SETTINGS['path'],
+            args = ['--no-sandbox','--disable-setuid-sandbox'],
+            ignoreHTTPSErrors = True,
+            )
+                page = await browser.newPage()
+                await stealth(page)
+                page.setDefaultNavigationTimeout(80*1000)
+                logged_in = await googleLogin(user,page)
 
-        if logged_in:
-            await asyncio.sleep(15)
-            await colabPuppet(links,page)
-        else:
-            print('login failed')
+                if logged_in:
+                    await asyncio.sleep(15)
+                    await colabPuppet(links,page)
+                else:
+                    print('login failed')
+            except KeyboardInterrupt as e:
+                raise SystemExit('The bot will now shut down...')
+            except Exception as e:
+                try:
+                    await browser.close()
+                except:
+                    print('browser already closed')
+                print(e)
 
     except KeyboardInterrupt:
-        try:
-            await browser.close()
-            raise SystemExit('Exiting from browser')
-        except:
-            print('already closed')
-            raise SystemExit('Exiting from browser')
+        raise SystemExit('Exiting from browser')
 
     except pyppeteer.errors.TimeoutError as e:
         print(str(e))
@@ -249,7 +254,6 @@ async def googleLogin(user,page):
         print('Logged in and counting...')
         approvedAccounts += 1
         print('approved user: ', user['username'])
-        time.sleep(45)  
         return True
 
     except Exception as e:
