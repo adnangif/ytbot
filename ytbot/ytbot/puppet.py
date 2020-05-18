@@ -143,39 +143,39 @@ async def colabResetRun(page):
         await page.click('#ok')
     except Exception as e:
         pass    
-    print(140)
+    print('started looping')
     await asyncio.sleep(2)
     await page.waitForSelector('#runtime-menu-button')
     await asyncio.sleep(2)
-    print(143)
+    print('found runtime button')
     await page.click('#runtime-menu-button')
     await asyncio.sleep(2)
-    print(149)
+    print('clicked runtime button')
     await page.waitForSelector('div[command="powerwash-current-vm"]')
     await asyncio.sleep(2)
     await page.click('div[command="powerwash-current-vm"]')
-    print(157)
+    print('clicking factory reset button')
     await page.waitForSelector('#ok')
     await asyncio.sleep(2)
     await page.click('#ok')
-    print(161)
+    print('clicking confirmation ok button')
     await asyncio.sleep(2)
     
     try:
         await page.click('#ok')
     except Exception as e:
         pass
-    print(168)
+    print('checked if another ok button was present')
     await page.waitForSelector('#runtime-menu-button')
     await asyncio.sleep(2)
     await page.click('#runtime-menu-button')
-    print(172)
+    print('clicking runtime button again!')
     await asyncio.sleep(2)
     await page.waitForSelector('div[command="runall"]')
     await asyncio.sleep(2)
     await page.click('div[command="runall"]')
     await asyncio.sleep(2)
-    print(178)
+    print('running all pending commands sequently')
     
     try:
         await page.click('#ok')
