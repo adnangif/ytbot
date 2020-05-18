@@ -90,7 +90,7 @@ def configure(SETTINGS):
     
 Success!!!
 Informations are saved. Now to run the bot,
-Try 'python3 -m ytbot run' to start the bot'''
+Try 'ytbot run' to start the bot'''
     print(success)
 
 
