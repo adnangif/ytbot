@@ -56,16 +56,16 @@ async def launchPuppet(SETTINGS):
 # Completed
 async def puppetShow(user,links,SETTINGS):
     try:
-        print('using profile: ')
-        print(user)
-        print('\n')
-        print('forwarded links: ')
-        print(links)
-        print('\n')
-        print('used settings: ')
-        print(SETTINGS)
-        print('____________________________________________')
         while True:
+            print('using profile: ')
+            print(user)
+            print('\n')
+            print('forwarded links: ')
+            print(links)
+            print('\n')
+            print('used settings: ')
+            print(SETTINGS)
+            print('____________________________________________')
             try:
                 await asyncio.sleep(random.randint(2,15))
                 browser = await launch(
