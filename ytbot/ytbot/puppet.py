@@ -114,7 +114,7 @@ def showInfos():
 
 
 
-#NotCompleted
+# NotCompleted
 async def colabPuppet(links,page):
     # Infos are displayed for user
     showInfos()
