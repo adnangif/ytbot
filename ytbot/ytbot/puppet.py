@@ -246,6 +246,7 @@ async def googleLogin(user,page):
         await page.keyboard.type('\n')
         print('Logged in and counting...')
         approvedAccounts += 1
+        print('approved user: ', user['username'])
         return True
 
     except Exception as e:
