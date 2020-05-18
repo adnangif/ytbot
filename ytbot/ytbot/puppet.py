@@ -3,6 +3,7 @@ import os
 import json
 import time
 import pyppeteer
+import random
 
 from pyppeteer import launch
 from pyppeteer_stealth import stealth
@@ -63,7 +64,7 @@ async def puppetShow(user,links,SETTINGS):
         print('used settings: ')
         print(SETTINGS)
         print('____________________________________________')
-        await asyncio.sleep(1)
+        await asyncio.sleep(random.randint(1,30))
         browser = await launch(
     headless= SETTINGS['headless'],
     executablePath = SETTINGS['path'],
