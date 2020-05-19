@@ -12,7 +12,7 @@ keywords = ['youtube','bot','view']
 
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.6.1"
 pyppeteer_stealth = "^1.0.0"
 asyncio = "^3.4.3"
 pyppeteer2 = "^0.2.2"
