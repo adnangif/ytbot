@@ -15,7 +15,8 @@ triedAccounts = 0
 approvedAccounts = 0
 pendingAccounts = []
 view_count = 0
-
+BASE_PATH = os.getcwd()
+BASE_PATH = os.path.join(BASE_PATH,'ytbot_config')
 
 
 # Completed
@@ -276,7 +277,6 @@ def stringifyList(given_list):
 # Completed
 def getAccounts():
     ''' retrives saved accounts'''
-    BASE_PATH = os.getcwd()
     acc_path = os.path.join(BASE_PATH,'accountInfo.json')
     with open(acc_path) as f:
         accounts = json.loads(f.read())
@@ -284,7 +284,6 @@ def getAccounts():
 # Completed
 def getLinks():
     ''' retrives saved links '''
-    BASE_PATH = os.getcwd()
     vid_path = os.path.join(BASE_PATH,'videoLinks.txt')
     with open(vid_path) as f:
         links = []
@@ -295,7 +294,6 @@ def getLinks():
 # Completed
 def getExecutablePath():
     ''' retrives saved executable path to chromium browser '''
-    BASE_PATH = os.getcwd()
     executable_path = os.path.join(BASE_PATH,'execpath.txt')
     with open(executable_path) as f:
         path = f.read().strip()
@@ -304,7 +302,6 @@ def getExecutablePath():
 # Completed
 def isConfigured():
     ''' checks if the cofig files exist '''
-    BASE_PATH = os.getcwd()
     acc_path = os.path.join(BASE_PATH,'accountInfo.json')
     vid_path = os.path.join(BASE_PATH,'videoLinks.txt')
     executable_path = os.path.join(BASE_PATH,'execpath.txt')

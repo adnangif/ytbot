@@ -1,6 +1,12 @@
 import os
 import json
 
+# global variables
+BASE_PATH = os.getcwd()
+BASE_PATH = os.path.join(os.getcwd,'ytbot_config') # Changing base path to config folder
+
+if not os.path.exists(BASE_PATH):
+    os.makedirs(BASE_PATH)
 
 
 def reset():
@@ -12,7 +18,6 @@ def reset():
         'videoLinks.txt' from BASE_PATH
 
     '''
-    BASE_PATH = os.getcwd()
     acc_info = os.path.join(BASE_PATH, 'accountInfo.json')
     video_info = os.path.join(BASE_PATH, 'videoLinks.txt')  
     executable_info = os.path.join(BASE_PATH,'execpath.txt')
@@ -38,7 +43,6 @@ Try 'ytbot configure' to configure before running again
 
 
 def configure(SETTINGS):
-    BASE_PATH = os.getcwd()
     acc_info = os.path.join(BASE_PATH, 'accountInfo.json')
     video_info = os.path.join(BASE_PATH, 'videoLinks.txt')
     executable_info = os.path.join(BASE_PATH,'execpath.txt')
