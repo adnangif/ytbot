@@ -3,7 +3,7 @@ import json
 
 # global variables
 BASE_PATH = os.getcwd()
-BASE_PATH = os.path.join(os.getcwd,'ytbot_config') # Changing base path to config folder
+BASE_PATH = os.path.join(BASE_PATH,'ytbot_config') # Changing base path to config folder
 
 if not os.path.exists(BASE_PATH):
     os.makedirs(BASE_PATH)
