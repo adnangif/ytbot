@@ -27,11 +27,11 @@ after entering google infos,then it will ask for youtube video url. provide as m
 
 ## When the configuration is complete, run the bot symply by "ytbot run" or "ytbot run -h" for headless/silent mode.(headless means no window)
 
-# OTHER functions->
-## IN CONSOLE,
+
+# Console commands
 .
 ## $ ytbot
-## [Shows help text]
+[Shows help text]
 .
 ## $ ytbot configure
 ## (i  )Provide an executable path to chromium-browser[You need to do this only once]
