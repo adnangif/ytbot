@@ -34,21 +34,20 @@ after entering google infos,then it will ask for youtube video url. provide as m
 ## [Shows help text]
 .
 ## $ ytbot configure
-............|
 ## (i  )Provide an executable path to chromium-browser[You need to do this only once]
 ## (ii )Add google Accounts
 ## (iii)Provide video links
 .
 ## $ ytbot reset
-## [RESET the previous configuration]
+[RESET the previous configuration]
 .
 .
 .
 ## $ ytbot run 
-## [Run in visible mode\ headfull mode(you can see what's going on)]
+[Run in visible mode\ headfull mode(you can see what's going on)]
 .
 ## $ ytbot run --headless
-## [Run in silent mode\ headless mode(browser windows are hidden)]
+[Run in silent mode\ headless mode(browser windows are hidden)]
 
 
 
