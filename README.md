@@ -16,7 +16,7 @@ A few google accounts(this is important)
 *a little bit of patience
 
 
-I tried my best to make it as user friendly as possible. But you should find bugs here and there. I'm still testing the capabilities of this bot. So, I don't know for sure if it would work for everyone...
+
 
 How to use it?
 
@@ -29,23 +29,24 @@ When the configuration is complete, run the bot symply by "ytbot run" or "ytbot 
 
 OTHER functions->
 IN CONSOLE,
-
+.
 $ ytbot
 [Shows help text]
-
+.
 $ ytbot configure
-            |
-            |---> (i  )Provide an executable path to chromium-browser[You need to do this only once]
-            |---> (ii )Add google Accounts
-            <---> (iii)Provide video links
-
+............|
+............|---> (i  )Provide an executable path to chromium-browser[You need to do this only once]
+............|---> (ii )Add google Accounts
+............<---> (iii)Provide video links
+.
 $ ytbot reset
 [RESET the previous configuration]
-
-
+.
+.
+.
 $ ytbot run 
 [Run in visible mode\ headfull mode(you can see what's going on)]
-
+.
 $ ytbot run --headless
 [Run in silent mode\ headless mode(browser windows are hidden)]
 
