@@ -30,6 +30,9 @@ When the configuration is complete, run the bot symply by "ytbot run" or "ytbot 
 OTHER functions->
 IN CONSOLE,
 
+$ ytbot
+[Shows help text]
+
 $ ytbot configure
             |
             |---> (i  )Provide an executable path to chromium-browser[You need to do this only once]
@@ -39,8 +42,6 @@ $ ytbot configure
 $ ytbot reset
 [RESET the previous configuration]
 
-$ ytbot
-[Shows help text]
 
 $ ytbot run 
 [Run in visible mode\ headfull mode(you can see what's going on)]
@@ -50,5 +51,5 @@ $ ytbot run --headless
 
 
 
-::
+
             
