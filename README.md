@@ -30,24 +30,24 @@ When the configuration is complete, run the bot symply by "ytbot run" or "ytbot 
 # OTHER functions->
 IN CONSOLE,
 .
-$ ytbot
+## $ ytbot
 [Shows help text]
 .
-$ ytbot configure
+## $ ytbot configure
 ............|
 ............|---> (i  )Provide an executable path to chromium-browser[You need to do this only once]
 ............|---> (ii )Add google Accounts
 ............<---> (iii)Provide video links
 .
-$ ytbot reset
+## $ ytbot reset
 [RESET the previous configuration]
 .
 .
 .
-$ ytbot run 
+## $ ytbot run 
 [Run in visible mode\ headfull mode(you can see what's going on)]
 .
-$ ytbot run --headless
+## $ ytbot run --headless
 [Run in silent mode\ headless mode(browser windows are hidden)]
 
 
