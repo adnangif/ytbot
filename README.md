@@ -10,7 +10,7 @@ pip install ytbot
 
 what are the requirements?
 
-python3.6 or above \n
+python3.6 or above 
 chromium-browser(developer version) 
 A few google accounts(this is important) 
 *a little bit of patience
