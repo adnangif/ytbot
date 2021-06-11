@@ -6,4 +6,4 @@ pyppeteer-stealth==1.0.0
 pyppeteer2==0.2.2
 tqdm==4.46.0
 urllib3==1.25.9
-websockets==8.1
+websockets==9.1
